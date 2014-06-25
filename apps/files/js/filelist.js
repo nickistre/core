@@ -150,7 +150,7 @@
 
 			this.$el.find('thead th .columntitle').click(_.bind(this._onClickHeader, this));
 
-			this._onResize = _.bind(this._onResize, this);
+			this._onResize = _.debounce(_.bind(this._onResize, this), 100);
 			$(window).resize(this._onResize);
 
 			this.$el.on('show', this._onResize);
@@ -180,12 +180,12 @@
 		 */
 		_onResize: function() {
 			var containerWidth = this.$el.width();
-			var actionsWidth = 64; // some padding
+			var actionsWidth = 0;
 			$.each(this.$el.find('#controls .actions'), function(index, action) {
-				actionsWidth += $(action).outerWidth();
+				actionsWidth += $(action).width();
 			});
 
-			this.breadcrumb.setMaxWidth(containerWidth - actionsWidth - 64);
+			this.breadcrumb.setMaxWidth(containerWidth - actionsWidth - 10);
 		},
 
 		/**
