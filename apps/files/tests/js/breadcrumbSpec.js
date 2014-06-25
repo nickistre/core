@@ -19,7 +19,6 @@
 *
 */
 
-/* global BreadCrumb */
 describe('OCA.Files.BreadCrumb tests', function() {
 	var BreadCrumb = OCA.Files.BreadCrumb;
 
@@ -131,11 +130,25 @@ describe('OCA.Files.BreadCrumb tests', function() {
 		});
 	});
 	describe('Resizing', function() {
-		var bc, dummyDir;
+		var bc, dummyDir, widths, oldUpdateTotalWidth;
 
 		beforeEach(function() {
 			dummyDir = '/short name/longer name/looooooooooooonger/' +
 				'even longer long long long longer long/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/last one';
+
+			// using hard-coded widths (pre-measured) to avoid getting different
+			// results on different browsers due to font engine differences
+			widths = [41, 106, 112, 160, 257, 251, 91];
+
+			oldUpdateTotalWidth = BreadCrumb.prototype._updateTotalWidth;
+			BreadCrumb.prototype._updateTotalWidth = function() {
+				// pre-set a width to simulate consistent measurement
+				$('div.crumb').each(function(index){
+					$(this).css('width', widths[index]);
+				});
+
+				return oldUpdateTotalWidth.apply(this, arguments);
+			};
 
 			bc = new BreadCrumb();
 			// append dummy navigation and controls
@@ -146,6 +159,7 @@ describe('OCA.Files.BreadCrumb tests', function() {
 			$('#controls').append(bc.$el);
 		});
 		afterEach(function() {
+			BreadCrumb.prototype._updateTotalWidth = oldUpdateTotalWidth;
 			bc = null;
 		});
 		it('Hides breadcrumbs to fit max allowed width', function() {
