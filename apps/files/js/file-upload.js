@@ -181,7 +181,6 @@ OC.Upload = {
 
 	init: function() {
 		if ( $('#file_upload_start').exists() ) {
-
 			var file_upload_param = {
 				dropZone: $('#content'), // restrict dropZone to content div
 				autoUpload: false,
@@ -459,14 +458,14 @@ OC.Upload = {
 					OC.Upload.log('progress handle fileuploadstop', e, data);
 
 					$('#uploadprogresswrapper input.stop').fadeOut();
-					$('#uploadprogressbar').fadeOut();
+					$('#uploadprogressbar').animate({opacity: 0});
 				});
 				fileupload.on('fileuploadfail', function(e, data) {
 					OC.Upload.log('progress handle fileuploadfail', e, data);
 					//if user pressed cancel hide upload progress bar and cancel button
 					if (data.errorThrown === 'abort') {
 						$('#uploadprogresswrapper input.stop').fadeOut();
-						$('#uploadprogressbar').fadeOut();
+						$('#uploadprogressbar').animate({opacity: 0});
 					}
 				});
 
@@ -668,12 +667,12 @@ OC.Upload = {
 							});
 							eventSource.listen('success', function(data) {
 								var file = data;
-								$('#uploadprogressbar').fadeOut();
+								$('#uploadprogressbar').animate({opacity: 0});
 
 								FileList.add(file, {hidden: hidden, animate: true});
 							});
 							eventSource.listen('error', function(error) {
-								$('#uploadprogressbar').fadeOut();
+								$('#uploadprogressbar').animate({opacity: 0});
 								var message = (error && error.message) || t('core', 'Error fetching URL');
 								OC.Notification.show(message);
 								//hide notification after 10 sec
