@@ -9,9 +9,10 @@ RequestHeader set XAuthorization %{XAUTHORIZATION}e env=XAUTHORIZATION
 ErrorDocument 403 /core/templates/403.php
 ErrorDocument 404 /core/templates/404.php
 <IfModule mod_php5.c>
-php_value upload_max_filesize 513M
-php_value post_max_size 513M
-php_value memory_limit 512M
+# Commented out valus to allow for large file uploads
+#php_value upload_max_filesize 513M
+#php_value post_max_size 513M
+#php_value memory_limit 512M
 php_value mbstring.func_overload 0
 <IfModule env_module>
   SetEnv htaccessWorking true
